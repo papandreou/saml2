@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-LIBS=$(shell find . -regex "^./lib\/.*\.coffee\$$" | sed s/\.coffee$$/\.js/ | sed s/lib/lib-js/)
+LIBS=lib-js/saml2.js
 
 .PHONY: test
 
