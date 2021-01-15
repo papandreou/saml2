@@ -1,6 +1,6 @@
 {
   "name": "saml2-js-papandreou",
-  "version": "2.0.5",
+  "version": "2.0.5-patch1",
   "description": "SAML 2.0 node helpers",
   "author": "Clever",
   "main": "index.js",
