@@ -1,11 +1,12 @@
 
-# @darioackermann/saml2-js
+# saml2-js-papandreou
 
-`@darioackermann/saml2-js` is a node module that abstracts away the complexities of the SAML protocol behind an easy to use interface. It achieves this this by helping you implement a service provider for the SAML protocol. It currently does not implement the features to act as an identity provider.
+`saml2-js-papandreou` is a node module that abstracts away the complexities of the SAML protocol behind an easy to use interface. It achieves this this by helping you implement a service provider for the SAML protocol. It currently does not implement the features to act as an identity provider.
 
 ## Fork Notice
-**This is a fork of [Clever/saml2-js](https://github.com/Clever/saml2/)**
-I'll ensure that dependencies are regularly updated. PRs extending currently available functionality are welcome.
+**This is a fork of [darioackermann/saml2-js](https://github.com/darioackermann/saml2-js)**, itself a fork of [Clever/saml2-js](https://github.com/Clever/saml2/).
+
+This fork exists to carry a security fix ([`check_saml_signature` ignored the boolean return of `checkSignature`](https://github.com/darioackermann/saml2-js/pull/27), allowing a forged SAML assertion with a bogus digest to be accepted as validly signed) ahead of it landing upstream.
 
 ## Usage
 

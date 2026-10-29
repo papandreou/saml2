@@ -53,7 +53,13 @@ create_authn_request = (issuer, assert_endpoint, destination, force_authn, conte
 # Adds an embedded signature to a previously generated AuthnRequest
 sign_authn_request = (xml, private_key, options = {}) ->
   signer = new SignedXml options
-  signer.addReference {xpath: "//*[local-name(.)='AuthnRequest']", digestAlgorithm: "http://www.w3.org/2000/09/xmldsig#sha1", transforms: ["http://www.w3.org/2001/10/xml-exc-c14n#"]}
+  # The enveloped-signature transform must run before exc-c14n, so the
+  # digest is computed over the request *without* the <Signature> element
+  # that's about to be inserted into it. Without it, the digest computed
+  # here (pre-insertion) never matches the one computed on verification
+  # (post-insertion), so `checkSignature` always returns false for an
+  # AuthnRequest signed this way - see https://github.com/Clever/saml2/pull/287
+  signer.addReference {xpath: "//*[local-name(.)='AuthnRequest']", digestAlgorithm: "http://www.w3.org/2000/09/xmldsig#sha1", transforms: ["http://www.w3.org/2000/09/xmldsig#enveloped-signature", "http://www.w3.org/2001/10/xml-exc-c14n#"]}
   signer.canonicalizationAlgorithm = "http://www.w3.org/2001/10/xml-exc-c14n#"
   signer.privateKey = private_key
   signer.signatureAlgorithm = options.signatureAlgorithm or "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
@@ -264,7 +270,13 @@ check_saml_signature = (xml, certificate, namespaces) ->
   sig.publicCert = format_pem(certificate, 'CERTIFICATE')
   sig.loadSignature signature[0]
   try
-    sig.checkSignature xml
+    # xml-crypto >= 4's `checkSignature` only throws when the reference
+    # digests are valid but the final SignatureValue check fails. When the
+    # reference/digest validation itself fails (e.g. a forged or garbage
+    # DigestValue), it returns `false` instead - that must be checked
+    # explicitly, see https://github.com/Clever/saml2/pull/287
+    valid = sig.checkSignature xml
+    return null unless valid
     return get_signed_data(doc, sig)
   catch err
     if err.message.includes("invalid signature")

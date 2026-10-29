@@ -1,6 +1,6 @@
 {
-  "name": "@darioackermann/saml2-js",
-  "version": "7.1.0",
+  "name": "saml2-js-papandreou",
+  "version": "7.1.0-patch1",
   "description": "SAML 2.0 node helpers",
   "author": "darioackermann",
   "license": "Apache-2.0",
@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/darioackermann/saml2-js.git"
+    "url": "git://github.com/papandreou/saml2.git"
   },
   "keywords": [
     "saml",
     "node"
   ],
   "bugs": {
-    "url": "https://github.com/darioackermann/saml2-js/issues"
+    "url": "https://github.com/papandreou/saml2/issues"
   },
   "devDependencies": {
     "coffeescript": "^1.12.7",
@@ -40,7 +40,7 @@
     "xmlbuilder2": "^3.1.1",
     "xpath": "^0.0.34"
   },
-  "homepage": "https://github.com/darioackermann/saml2-js#readme",
+  "homepage": "https://github.com/papandreou/saml2#readme",
   "directories": {
     "lib": "lib",
     "test": "test"

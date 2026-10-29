@@ -5,3 +5,4 @@ lib-js
 package-lock.json
 coverage
 .nyc_output/
+.npmrc

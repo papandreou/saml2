@@ -191,6 +191,14 @@ describe 'saml2', ->
       it 'rejects xml with an invalid signature', ->
         assert.equal null, saml2.check_saml_signature(get_test_file("good_assertion.xml"), get_test_file("test2.crt"))
 
+      it 'rejects a forged signature with a garbage digest, even against the correct certificate', ->
+        # Regression test: a `<Signature>` element with a bogus DigestValue
+        # and SignatureValue was previously accepted as valid, because
+        # xml-crypto's `checkSignature` returns `false` (instead of
+        # throwing) when the reference/digest validation fails, and that
+        # return value was not being checked.
+        assert.equal null, saml2.check_saml_signature(get_test_file("forged_assertion.xml"), get_test_file("test.crt"))
+
       it 'validates a Response signature when a signature also exists within the Assertion', ->
         assert.notEqual null, saml2.check_saml_signature(get_test_file("good_response_twice_signed.xml"), get_test_file("test.crt"))
 
